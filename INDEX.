@@ -1,0 +1,57 @@
+import pygame
+import random
+
+# Define as cores
+BRANCO = (255, 255, 255)
+VERDE = (0, 255, 0)
+VERMELHO = (255, 0, 0)
+
+# Define as dimensões padrão da tela
+LARGURA = 800
+ALTURA = 600
+
+# Inicializa o PyGame
+pygame.init()
+
+# Cria a tela
+tela = pygame.display.set_mode((LARGURA, ALTURA))
+
+# Define o título da janela
+pygame.display.set_caption("Jogo do Meio Ambiente")
+
+# Cria um jogador
+jogador = pygame.Rect(100, 100, 50, 50)
+
+# Cria os obstáculos
+obstaculos = []
+for i in range(10):
+    obstaculos.append(pygame.Rect(
+        random.randint(0, LARGURA - 50), random.randint(0, ALTURA - 50), 50, 50))
+
+# Define a velocidade do jogador
+velocidade = 10
+
+# Inicia o loop principal do jogo
+while True:
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+        if evento.type == pygame.KEYDOWN:
+            if evento.key == pygame.K_LEFT:
+                jogador.x -= velocidade
+            elif evento.key == pygame.K_RIGHT:
+                jogador.x += velocidade
+
+    for obstaculo in obstaculos:
+        if jogador.colliderect(obstaculo):
+            print("Game over!")
+            pygame.quit()
+            exit()
+
+    tela.fill(BRANCO)
+    pygame.draw.rect(tela, VERDE, jogador)
+    for obstaculo in obstaculos:
+        pygame.draw.rect(tela, VERMELHO, obstaculo)
+
+    pygame.display.update()
